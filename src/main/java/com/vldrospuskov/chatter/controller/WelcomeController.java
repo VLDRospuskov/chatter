@@ -8,9 +8,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class WelcomeController {
 
-//    @GetMapping({"/", "/hello"})
-//    public String hello(Model model, @RequestParam(value="name", required=false, defaultValue="World") String name) {
-//        model.addAttribute("name", name);
-//        return "welcome";
-//    }
+    @GetMapping("/welcome")
+    public String hello(Model model, @RequestParam(value="name", required=false, defaultValue="World") String name) throws InterruptedException {
+        model.addAttribute("show", name);
+        return "welcome";
+    }
+
 }
