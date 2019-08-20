@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Hello WebSocket</title>
+    <title>Chatter</title>
     <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
     <script src="/webjars/jquery/jquery.min.js"></script>
@@ -18,8 +18,6 @@
         <div class="col-md-6">
             <form class="form-inline">
                 <div class="form-group">
-                    <label for="connect">WebSocket connection:</label>
-                    <button id="connect" class="btn btn-default" type="submit">Connect</button>
                     <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">Disconnect
                     </button>
                 </div>
@@ -28,19 +26,32 @@
         <div class="col-md-6">
             <form class="form-inline">
                 <div class="form-group">
-                    <label for="name">What is your name?</label>
-                    <input type="text" id="name" class="form-control" placeholder="Your name here...">
+                    <label for="userName">What is your name?</label>
+                    <input required="true" type="text" id="userName" class="form-control"
+                           placeholder="Your userName here...">
                 </div>
-                <button id="send" class="btn btn-default" type="submit">Send</button>
+                <button id="connect" class="btn btn-default" type="submit">Connect</button>
             </form>
         </div>
     </div>
+
+    <div class="col-md-6">
+        <form class="form-inline">
+            <div class="form-group">
+                <label for="message">Message</label>
+                <input type="text" id="message" class="form-control" placeholder="Your message here...">
+            </div>
+            <button id="send" class="btn btn-default" type="submit">Send</button>
+        </form>
+    </div>
+
+
     <div class="row">
         <div class="col-md-12">
             <table id="conversation" class="table table-striped">
                 <thead>
                 <tr>
-                    <th>Greetings</th>
+                    <th>Chat:</th>
                 </tr>
                 </thead>
                 <tbody id="greetings">
@@ -48,6 +59,22 @@
             </table>
         </div>
     </div>
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <table id="users_id" class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Active users:</th>
+                </tr>
+                </thead>
+                <tbody id="users">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 </div>
 </body>
 </html>
