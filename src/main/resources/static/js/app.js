@@ -1,5 +1,7 @@
 var stompClient = null;
 var userName = null;
+var userList = [];
+var username = null;
 
 // sets connect
 function setConnected(connected) {
@@ -16,15 +18,27 @@ function setConnected(connected) {
 // connect to the server
 function connect() {
     if (!isEmptyUserName()) {
-        var socket = new SockJS('/gs-guide-websocket');
+        var socket = new SockJS('/ws');
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
             setConnected(true);
             console.log('Connected: ' + frame);
-            stompClient.send("/app/users", {}, JSON.stringify({'userName': $("#userName").val()}));
+            // stompClient.send("/app/users", {}, JSON.stringify({'userName': $("#userName").val()}));
+            stompClient.send("/app/users",
+                {},
+                JSON.stringify({'userName': $("#userName").val()}));
+
             stompClient.subscribe('/topic/info', function (message) {
-                showUsers(JSON.parse(message.body));
-            });
+                alert(message.body);
+            })
+            // stompClient.subscribe('/topic/info', function (message) {
+            //     alert(message.body);
+            //     userList = JSON.parse(message.body);
+            //     // showUsers(JSON.parse(message.body));
+            // });
+
+            userList.push($("#userName").val());
+            showUsers(userList);
             stompClient.subscribe('/topic/greetings', function (message) {
                 showGreeting(JSON.parse(message.body).content);
             });
@@ -51,12 +65,37 @@ function sendName() {
     stompClient.send("/app/hello", {}, value);
 }
 
+
+// var userList = null;
+// for (var i in message) {
+//     userList = message[i].userName;
+// }
+// $("#users").append("<tr><td>" + userList + "</td></tr>");
 function showUsers(message) {
-    var userList = null;
+
     for (var i in message) {
         userList = message[i].userName;
     }
     $("#users").append("<tr><td>" + userList + "</td></tr>");
+
+
+    //  var users = message.map(function(element) {
+   //      return element.userName;
+   //  });
+   //
+   // users.forEach(function(element) {
+   //      $('#users').append("<tr><td>" + element + "</td></tr>");
+   //  });
+
+    // message.forEach(function(element) {
+    //     var div = document.createElement("div");
+    //     div.innerHTML = "<tr><td>" + element.userName + "</td></tr>";
+    //     var users = document.getElementById("users");
+    //     return users.appendChild(div);
+    // });
+
+
+    // $("#users").append("<tr><td>" + userList + "</td></tr>");
 }
 
 function showGreeting(message) {
