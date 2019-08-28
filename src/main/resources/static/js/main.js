@@ -33,7 +33,7 @@ function disconnect() {
     if (stompClient !== null) {
         stompClient.send("/app/chat.deleteUser",
             {},
-            JSON.stringify({sender: username, type: 'LEAVE'})
+            JSON.stringify({sender: username})
         );
         stompClient.disconnect();
     }
@@ -49,8 +49,6 @@ function onConnected() {
         JSON.stringify({sender: username, type: 'JOIN'})
     );
     connectingElement.classList.add('hidden');
-
-    stompClient.subscribe('/app/chat.allUsers', getUsers);
 }
 
 
@@ -60,14 +58,27 @@ function updateUserList() {
 
 function getUsers(payload) {
     userList = JSON.parse(payload.body);
-    // alert(document.getElementById("userListArea").remove()); нужно почистить а далее положить сюда новые значения
+
+    const myNode = document.getElementById("userListArea");
+      while (myNode.firstChild) {
+        myNode.removeChild(myNode.firstChild);
+        myNode.innerHTML = '';
+      }
     userListArea.append(userList);
 }
 
 function changedUserListAfterJoin(user) {
     if (!userList.includes(user)) {
-        userListArea.append("," + user);
+         userList = updateUserList();
+         userListArea.append(userList);
     }
+}
+
+function changedUserListAfterLeft(user) {
+      if (userList.includes(user)) {
+             userList = updateUserList();
+             userListArea.append(userList);
+        }
 }
 
 function onError(error) {
@@ -97,6 +108,7 @@ function onMessageReceived(payload) {
     } else if (message.type === 'LEAVE') {
         messageElement.classList.add('event-message');
         message.content = message.sender + ' left!';
+        changedUserListAfterLeft(message.sender);
     } else {
         messageElement.classList.add('chat-message');
         var avatarElement = document.createElement('i');

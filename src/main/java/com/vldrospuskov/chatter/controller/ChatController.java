@@ -12,12 +12,15 @@ import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.stereotype.Controller;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 public class ChatController {
 
-    ArrayList<String> userList = new ArrayList<String>( Arrays.asList("alex", "brian", "charles") );
+    private static ArrayList<String> userList = new ArrayList<>();
 
+    private final String PATTERN_FIND_USER_NAME = ":(\"|')([^\"']+)";
     @Autowired private SimpUserRegistry simpUserRegistry;
 
     @MessageMapping("/chat.sendMessage")
@@ -46,10 +49,14 @@ public class ChatController {
 
     @MessageMapping("/chat.deleteUser")
     @SendTo("/topic/public")
-    public List<String> deleteUser(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
-        headerAccessor.getSessionAttributes().remove("username", chatMessage.getSender());
-        String sender = chatMessage.getSender();
-        userList.remove(sender);
+    public List<String> deleteUser(@Payload String userName, SimpMessageHeaderAccessor headerAccessor) {
+        headerAccessor.getSessionAttributes().remove("username", userName);
+        Pattern pattern = Pattern.compile(PATTERN_FIND_USER_NAME);
+        Matcher matcher = pattern.matcher(userName);
+        if (matcher.find()) {
+            String username = matcher.group(2);
+            userList.remove(username);
+        }
         return userList;
     }
 
