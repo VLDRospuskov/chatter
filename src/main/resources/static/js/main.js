@@ -2,7 +2,7 @@
 var usernamePage = document.querySelector('#username-page');
 var chatPage = document.querySelector('#chat-page');
 var usernameForm = document.querySelector('#usernameForm');
-var disconnectForm = document.querySelector('#disconnectForm');
+var disconnectForm = document.querySelector('#disconnectSubmit');
 var messageForm = document.querySelector('#messageForm');
 var messageInput = document.querySelector('#message');
 var messageArea = document.querySelector('#messageArea');
@@ -30,6 +30,7 @@ function connect(event) {
 }
 
 function disconnect() {
+    alert('hello');
     if (stompClient !== null) {
         stompClient.send("/app/chat.deleteUser",
             {},
@@ -37,7 +38,8 @@ function disconnect() {
         );
         stompClient.disconnect();
     }
-    console.log("Disconnected");
+    window.location.reload();
+    console.log("Disconnected456");
 }
 
 function onConnected() {
@@ -65,6 +67,8 @@ function getUsers(payload) {
         myNode.innerHTML = '';
       }
     userListArea.append(userList);
+
+      // userList forEach and append
 }
 
 function changedUserListAfterJoin(user) {
@@ -112,7 +116,9 @@ function onMessageReceived(payload) {
     } else {
         messageElement.classList.add('chat-message');
         var avatarElement = document.createElement('i');
-        var avatarText = document.createTextNode(message.sender[0]);
+        if (message && message.sender && message.sender[0]) {
+            var avatarText = document.createTextNode(message.sender[0]);
+        }
         avatarElement.appendChild(avatarText);
         avatarElement.style['background-color'] = getAvatarColor(message.sender);
         messageElement.appendChild(avatarElement);
@@ -137,19 +143,7 @@ function getAvatarColor(messageSender) {
     return colors[index];
 }
 
-
-document.addEventListener('keyup', function (event) {
-    if (event.defaultPrevented) {
-        return;
-    }
-
-    var key = event.key || event.keyCode;
-
-    if (key === 'F5' || key === 116) {
-        disconnect();
-    }
-});
-
+window.addEventListener('beforeunload', disconnect, false)
 usernameForm.addEventListener('submit', connect, true)
-disconnectForm.addEventListener('submit', disconnect, true)
+disconnectForm.addEventListener('click', disconnect, true)
 messageForm.addEventListener('submit', sendMessage, true)

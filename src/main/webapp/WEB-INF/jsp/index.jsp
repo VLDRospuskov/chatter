@@ -25,15 +25,9 @@
 
 
 <div id="chat-page" class="hidden">
-
-
     <div class="chat-container">
 
-        <form id="disconnectForm" name="disconnectForm">
-            <div class="form-group">
-                <button type="disconnect" class="accent username-submit">Disconnect</button>
-            </div>
-        </form>
+        <button id="disconnectSubmit" type="submit" class="accent username-submit">Disconnect</button>
 
         <div class="chat-header">
             <h2>Chatter</h2>
@@ -52,8 +46,9 @@
             </div>
         </form>
     </div>
-
     <br>
+
+
     <div class="users-container">
         <div class="users-header" style="text-align: center">
         <h2>User list</h2>
@@ -61,6 +56,8 @@
         </ul>
         </div>
     </div>
+
+
 </div>
 
 
