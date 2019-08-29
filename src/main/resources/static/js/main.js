@@ -30,7 +30,6 @@ function connect(event) {
 }
 
 function disconnect() {
-    alert('hello');
     if (stompClient !== null) {
         stompClient.send("/app/chat.deleteUser",
             {},
