@@ -138,6 +138,17 @@ function getAvatarColor(messageSender) {
 }
 
 
+document.addEventListener('keyup', function (event) {
+    if (event.defaultPrevented) {
+        return;
+    }
+
+    var key = event.key || event.keyCode;
+
+    if (key === 'F5' || key === 116) {
+        disconnect();
+    }
+});
 
 usernameForm.addEventListener('submit', connect, true)
 disconnectForm.addEventListener('submit', disconnect, true)
