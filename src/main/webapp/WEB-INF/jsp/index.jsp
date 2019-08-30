@@ -50,10 +50,10 @@
 
 
     <div class="users-container">
+
         <div class="users-header" style="text-align: center">
-        <h2>User list</h2>
-        <ul id="userListArea">
-        </ul>
+            <h2>User list</h2>
+            <ul id="userListArea"></ul>
         </div>
     </div>
 
